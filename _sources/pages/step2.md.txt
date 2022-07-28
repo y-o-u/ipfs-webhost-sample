@@ -1,0 +1,160 @@
+# 4. 日本の電話番号を取得する
+
+この章では作成したFlexに紐付ける日本の電話番号の取得を行います。
+
+Flexは立ち上げるとUSの電話番号が取得されます。
+日本から電話をかけるとなると国際電話料金がかかってしまうため、本ハンズオンでは日本の電話番号を取得して使用します。
+
+## 4-1. Regulatory Bundlesの申請
+
+日本の電話番号を取得する際、国固有の規制により、電話番号のタイプごとに規制バンドルを作成する必要があります。
+
+### 1 . [https://www.twilio.com/console](https://www.twilio.com/console)に遷移します。
+
+Flexのプロジェクトであることを確認してください。
+
+### 2 . **[https://www.twilio.com/console/phone-numbers/regulatory-compliance/bundles](https://www.twilio.com/console/phone-numbers/regulatory-compliance/bundles)**
+に遷移します
+
+![step2_1](../images/step2_1.png "step2_1")
+
+`Create a Regulatory Bundle` をクリックします。
+
+### 3 . **Choose Country & Type of phone number that needs to be compliant**
+
+- `PHONE NUMBER'S COUNTRY`　を `Japan`
+- `TYPE OF PHONE NUMBER` を `Local`
+にし, `Next`をクリックします
+
+![step2_2](../images/step2_2.png "step2_2")
+
+### 4 . **Select the End-User who will use Japan Local phone numbers**
+
+`Individual`を選択し、`Next`をクリックします
+
+![step2_3](../images/step2_3.png "step2_3")
+
+### 5 . **Enter information about the individual**
+
+`FIRST NAME`, `LAST NAME`, `BIRTH DATE`を入力し、`Next`をクリックします
+
+![step2_4](../images/step2_4.png "step2_4")
+
+### 6 . **Upload Supporting Documents**
+
+自信を証明する書類をアップロードします。
+
+運転免許証かパスポートで問題ありません。
+
+![step2_5](../images/step2_5.png "step2_5")
+![step2_6](../images/step2_6.png "step2_6")
+
+画像を選択後、
+- `SUPPORTING DOCUMENT FRIENDLY NAME` : 任意の名前
+- `FIRST NAME`, `LAST NAME`, `BIRTH DATE`
+- `Does this Supporting Document also confirm the End-User's Address?` : YES
+
+![step2_7](../images/step2_7.png "step2_7")
+
+- `ADDRESS FRIENDLY NAME`, `ADDRESS 1`, `CITY`, `STATE/PROVINCE/REGION`, `COUNTRY`, `POSTAL CODE` 
+
+を入力します。
+アップロードした証明証と同じ情報にします。
+
+![step2_8](../images/step2_8.png "step2_8")
+
+入力が終わったら`Save`をクリックします。
+
+![step2_9](../images/step2_9.png "step2_9")
+
+緑のチェックマークがついていることを確認し、`Next`をクリックします。
+
+### 7 . **Give this Regulatory Bundle a Friendly Name (Optional)**
+
+規制バンドルに任意の名前をつけ,
+`Next`をクリックします。
+
+![step2_10](../images/step2_10.png "step2_10")
+
+### 8 . **Set-up Notifications (Optional)**
+
+規制バンドルのステータス、停止、および関連する問題に関しての通知を受け取るメールアドレスを入力します。
+
+その後, `Submit for review`をクリックし、申請が完了となります。
+
+![step2_11](../images/step2_11.png "step2_11")
+![step2_12](../images/step2_12.png "step2_12")
+
+
+### 9 . **ステータスの確認**
+
+8が終わると自動的にBundlesの一覧画面に遷移します。
+
+`STATUS`が`Pending Review`になっているはずです。
+
+申請が承認されると `Twilio Approved` になります。
+
+**通常、申請がおりるまで1日程度かかります。**
+
+また、メールでも申請結果が送られてきます。
+
+### 10. Addressの登録
+
+`Regulatory Bundles`を作成した時に作られている場合は不要です。そうでなかった場合は作成しましょう。
+
+[https://www.twilio.com/console/phone-numbers/addresses](https://www.twilio.com/console/phone-numbers/addresses)　に遷移します。
+
+`+`をクリックし、`Regulatory Bundles`を申請した時と同じ住所を登録します。
+
+![step2_19](../images/step2_19.png "step2_19")
+
+![step2_20](../images/step2_20.png "step2_20")
+
+
+## 4-2. 日本の電話番号の取得
+
+規制バンドルの申請が承認された後、電話番号を購入します。
+
+### 1. Flexプロジェクトのコンソールに遷移
+
+[https://www.twilio.com/console](https://www.twilio.com/console)で `Get a Number`　をクリックします。
+
+![step2_14](../images/step2_14.png "step2_14")
+
+### 2. 電話番号の検索
+
+- `Country`を`Japan`
+- `CAPABILITIES`を`Voice`
+にし、`Search`をクリックします。
+
+![step2_15](../images/step2_15.png "step2_15")
+
+### 3. 購入処理
+
+一覧に出てきた番号のいずれかの`Buy`をクリックします。
+
+![step2_16](../images/step2_16.png "step2_16")
+
+購入する電話番号と値段を確認し、`Next`をクリックします。
+
+![step2_17](../images/step2_17.png "step2_17")
+
+`Individual`を選択し、Nextをクリックします
+
+![step2_18](../images/step2_18.png "step2_18")
+
+`Regulatory Bundle`と`Address Requirement`を事前に準備したものにして`Buy`をクリックします。
+
+![step2_21](../images/step2_21.png "step2_21")
+
+購入完了後、設定画面に遷移します。
+
+`A CALL COMES IN`の項目を以下のように設定して`Save`をクリックして完了です。
+
+- `Studio Flow`
+- `Voice IVR`
+
+![step2_22](../images/step2_22.png "step2_22")
+
+
+この章は以上で終了になります。

@@ -1,0 +1,151 @@
+# 8. CRMとの統合(Zendesk)
+
+これまでの章でエンドユーザーからの着信をコンタクトセンターのエージェントが受ける　というフローの構築を行いました。
+
+本番環境でのコンタクトセンターではこれだけではなく顧客管理が必要になってきます。
+
+Twilio Flexには顧客管理する機能を持っていないのですが、
+CRMとの連携をすることによって可能になります。
+
+[特徴](https://www.twilio.com/docs/flex/integrations/zendesk#set-up-taskrouter-for-outbound-calling)
+
+本ハンズオンではZendeskとの統合を行います。
+
+Zendesk上でエンドユーザーからの着信を受け取り、サポートチケットが起票されることを確認します。
+
+## 8-1. Flex側のセットアップ
+
+### 1. Flexにアクセス
+
+管理者として[https://flex.twilio.com](https://flex.twilio.com)にアクセスします
+
+`INTEGRATIONS`にある`CONFIGURE`をクリックします。
+
+![step6_1](../images/step6_1.png "step6_1")
+
+`INTEGRATIONS`の画面で`Zendesk`を選択します。
+
+![step6_2](../images/step6_2.png "step6_2")
+
+### 2. 設定を行う
+
+|設定名|説明|
+|---|---|
+| STATUS | 統合を有効にするかどうか |
+| Workflow SID | デフォルトのワークフローとは異なるワークフローを使用する場合は、ここにワークフローSIDを入力してください。そうでない場合は、空のままにします |
+| Task Channel SID | デフォルトの音声チャネルとは異なるタスクチャネルを使用する場合は、ここにタスクチャネルSIDを指定してください。そうでない場合は、空のままにします |
+| Agent Caller ID | エージェントが発信者IDを定義していない場合、Flex-Zendeskインテグレーションからの（Click to Dialを介した）アウトバウンドコールに使用される発信者ID。 |
+| Zendesk Base URL | ZendeskドメインURL |
+| RECORDING |インバウンド音声録音を有効, 内部メモとしてチャットの詳細をログに記録|
+| New ticket description | Flexによる自動チケット作成に使用される説明 |
+| New ticket subject | Flexによる自動チケット作成に使用されるサブジェクト|
+| LOG | タスクのメタデータを関連するZendeskチケットに「内部メモ」として記録する必要がある場合、タスクのステージを設定できます。3つのステージのいずれかを選択することも、まったく選択しないこともできます。<br><br>  - タスクの開始：エージェントがタスクを受け入れるときにログに記録します。<br>  - タスク切り替え：エージェントがタスクを選択したときにログに記録します。マルチタスク設定で特に役立ちます<br>  - タスク完了：エージェントがタスクを完了したときにログに記録します。|
+| NAVIGATE | エージェントがタスクを承諾/選択するときにScreenpopの性質を選択します <br><br> - エージェント画面にチケットを表示する<br> - エージェント画面にユーザーを表示する<br> - 何も表示しない|
+| CREATE | 新しいチケットまたはユーザーを作成するかどうか、いつ作成するかを選択します。無効なチケット番号が提供された場合、または提供されなかった場合、次のことを選択できます<br><br> - 新しいチケットを作成する<br> - ユーザーが不明な場合は、新しいユーザーを作成します。|
+
+![step6_3](../images/step6_3.png "step6_3")
+
+### 3. (オプション)Click to Dial
+
+エージェントがボタンをクリックするだけでアウトバウンドコールを発信できるようにする機能ですが、ベータ版のため割愛します。
+
+[公式手順](https://www.twilio.com/docs/flex/integrations/zendesk#set-up-taskrouter-for-outbound-calling)
+
+## 8-2. Zendesk側のセットアップ
+
+### 1. Zendesk Marketplace
+
+Twilio Flexと連携したいZendeskにログインした状態で、Zendesk Marketplaceに遷移します。
+
+[https://www.zendesk.com/apps/support/twilio-flex](https://www.zendesk.com/apps/support/twilio-flex)
+
+![step6_4](../images/step6_4.png "step6_4")
+
+### 2. installと設定
+
+ページ上部の`install`をクリックします。
+設定画面に遷移するので変更したいパラメーターを記入します。
+
+|設定名|説明|
+|---|---|
+|Flex URL|Hosted Flexを使用する場合はそのままにします。<br>独自のインフラストラクチャでFlexをセルフホスティングする場合は、<br>これをFlexインスタンスのURLに変更する必要があります。<br>不明な場合は、フィールドをそのままにしておきます。 <br>このフィールドは、ZendeskのTwilio Flex Appに、<br>Flexがホストされ利用可能な場所を通知します。|
+|Flex widget width size (in pixels)|Zendesk UI内のFlexアプリの幅をピクセル単位で指定します。<br>幅を決定する際に考慮すべき重要なことは、<br>音声以外のチャネルを使用する場合、<br>サポートスタッフに優れたチャットエクスペリエンスを提供するため、<br>より広いFlexアプリが役立つことです。|
+|Flex widget height size (in pixels)|(widthと同じ説明)|
+
+![step6_5](../images/step6_5.png "step6_5")
+
+変更後、`インストール`をクリックします。
+
+インストールが終わると、Zendeskのページ上部にTwilio Flexアプリのアイコンが表示されていて、クリックするとウィジェットが起動します。
+
+![step6_6](../images/step6_6.png "step6_6")
+
+## 8-3. Flex-Zendeskコールフローの確認とカスタマイズ
+
+着信を受け入れてチケットが発番されるか確認します。
+
+### 1. デフォルトの状態
+
+新しいエンゲージメントごとに新しいチケットが作成されます。
+
+着信を受け入れると、以下のようになります。
+
+![step6_7](../images/step6_7.png "step6_7")
+
+### 2. カスタマイズする
+
+顧客からの着信を受けてチケットが生成されますが、
+エージェントが着信を受けた後、その顧客に関する既存のチケットを表示させたい時もあります。
+
+これを行うには顧客からのチケット番号を収集するためのIVRフローをカスタムする必要があります。
+
+#### 1. Flex Flow画面から、「Voice IVR」フローを選択します
+
+[https://www.twilio.com/console/studio/dashboard](https://www.twilio.com/console/studio/dashboard)に遷移して、`Voice IVR`をクリックします。
+
+![step6_8](../images/step6_8.png "step6_8")
+
+#### 2. Gather Input on Call Widgetを追加
+
+発信者からチケット番号を収集するために`Gather Input on Call Widget`を追加します。
+
+![step6_9](../images/step6_9.png "step6_9")
+
+任意の名前をつけておきます。
+
+例) getTicketNumber
+
+以下の図のように、`gather_1`の上に来るようにフローを修正します。
+
+![step6_10](../images/step6_10.png "step6_10")
+
+#### 3. TASK ATTRIBUTESの修正
+
+Voice IVRフローの最後にあるコール部分のウィジェットにある`ATTRIBUTES`を以下の内容に変更し保存します。
+
+```json
+{ "type": "inbound", "name": "{{trigger.call.From}}","zd_ticket_id" : "{{widgets.getTicketNumber.Digits}}" }
+```
+
+![step6_11](../images/step6_11.png "step6_11")
+
+### 3. 着信の確認
+
+Flexの電話番号に電話をかけてみます。
+
+チケット番号を指定すると、新しいチケットの代わりにチケット画面が表示されます。
+
+![step6_13](../images/step6_13.png "step6_13")
+
+SMS、Whatsapp、Webchatなどのテキストベースのチャネルでメッセージングボットを使用してチケット番号を収集し、そのチケット番号を「zd_ticket_id」タスク属性としてFlexに渡すこともできます。
+
+
+### 4. (参考) Zendeskチケットにカスタムタグを追加するためのIVRフロー
+
+`zdCustomTags`という名前のタスク属性にタグを追加して、顧客エンゲージメントフローで特定されたカスタムタグを追加できます。
+
+[https://www.twilio.com/docs/flex/integrations/zendesk/customize#ivr-flow-for-adding-custom-tags-to-zendesk-ticket](https://www.twilio.com/docs/flex/integrations/zendesk/customize#ivr-flow-for-adding-custom-tags-to-zendesk-ticket)
+
+
+
+この章は以上で終了です。

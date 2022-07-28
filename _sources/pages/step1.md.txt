@@ -1,0 +1,84 @@
+# 3. Flexプロジェクトの作成
+
+この章ではコンタクトセンターとなるFlexを構築するための手順を説明します。
+
+## 3-1. Twilioにログイン
+
+### 1. [https://www.twilio.com/login](https://www.twilio.com/login) に遷移し、ログインします
+
+![login_email](../images/step1_1.png "login_email")
+![login_pass](../images/step1_2.png "login_pass")
+
+Email, Password を入力してログインします。
+
+## 3-2. プロジェクト作成
+
+### 1 . **[https://www.twilio.com/console](https://www.twilio.com/console)**に遷移します。
+
+### 2 . ページの左側にあるメニューを表示させて`Flex`をクリックします
+
+![flex_1](../images/step1_3.png "flex_1")
+![flex_2](../images/step1_4.png "flex_2")
+
+### 3 .  `Create My Flex Project` をクリックします
+
+![flex_3](../images/step1_5.png "flex_3")
+
+### 4 .  任意のプロジェクト名を入力し、`Verify` をクリックします
+
+※ 半角全角英数字が可能
+![flex_4](../images/step1_6.png "flex_4")
+
+### 5 . 電話番号の確認を行います
+
+日本を選択し、所有する電話番号を入力して`Verify`をクリックします。
+
+`The phone number you provide will　〜〜〜`　のチェックボックスにチェックを入れてください。
+
+推奨: 携帯電話の番号(SMSで送信されてきます)
+
+![flex_5](../images/step1_7.png "flex_5")
+
+### 6 . コードの検証
+
+入力した電話番号にTwilioからコードが送られてきます。
+
+入力して`Verify`をクリックします。
+
+![flex_6](../images/step1_8.png "flex_6")
+
+
+検証が終わると、自動的にTwilio Flexのデプロイが行われます。
+
+![flex_7](../images/step1_9.png "flex_7")
+デプロイ中の画面
+
+デプロイが完了すると、自動的にFlexのUIにリダイレクトされます。
+
+![flex_8](../images/step1_10.png "flex_8")
+
+## 3-3. プロジェクトのコンソールの確認
+
+ブラウザの別タブで [https://www.twilio.com/console](https://www.twilio.com/console) を開きます。
+
+
+![flex_9](../images/step1_11.png "flex_9")
+
+作成したFlexプロジェクトになっていることを確認します。
+なっていない場合は画面左上から切り替えます。
+
+**`ACCOUNT SID` に表示されている文字列を控えます。**
+
+※ 本ハンズオンを円滑に進めるために必要になります
+
+## 3-4. Policyへの同意
+
+ブラウザの別タブで [https://www.twilio.com/console/flex/fair-usage-policy](https://www.twilio.com/console/flex/fair-usage-policy) を開きます。
+
+![flex_10](../images/step2_13.png "flex_10")
+
+`I agree to the Flex Fair Usage Policy`にチェックを付け、`Submit`をクリックします。
+
+
+
+この章は以上で終了になります。

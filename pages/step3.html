@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@sphinxjp" />
+    <meta property="og:site_name" content="twilioflex-handson  ドキュメント">
+    <meta property="og:title" content="5. Flexで着信を確認する">
+    <meta property="og:description" content="基本的なセットアップが終わったので、実際に着信確認を行います。 https://www.twilio.com/consoleに遷移し、Launch Flexをクリックします。 step3_1 Flex UIページが立ち上がります。 step3_2">
+    <meta property='og:url' content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/pages/step3.html">
+    <meta property="og:image" content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/_images/step3_1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>5. Flexで着信を確認する &mdash; twilioflex-handson  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6. ルーティングを作ってみる" href="step4.html" />
+    <link rel="prev" title="4. 日本の電話番号を取得する" href="step2.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> twilioflex-handson
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../main.html">Twilio Flex ハンズオン手順書</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirement.html">1. 前提条件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. 本ハンズオンに関して</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step1.html">3. Flexプロジェクトの作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step2.html">4. 日本の電話番号を取得する</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Flexで着信を確認する</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#flexui">5-1. FlexのUIを立ち上げる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">5-2. ステータスの変更</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">5-3. 電話をかけてみよう</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">5-4. チャットをしてみよう</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web">5-5. チャットをWebサイトに埋め込む</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#index-html">1. index.htmlを作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#headscript">2. headにscriptタグを貼り付ける</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webscript">3. Webチャットの初期設定を行うscriptタグを貼り付ける</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">4. 表示させて確認してみる</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step4.html">6. ルーティングを作ってみる</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step5.html">7. エージェントのスキルに基づいて着信をルーティングする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step6.html">8. CRMとの統合(Zendesk)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">twilioflex-handson</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>5. Flexで着信を確認する</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/step3.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="flex">
+<h1>5. Flexで着信を確認する<a class="headerlink" href="#flex" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>基本的なセットアップが終わったので、実際に着信確認を行います。</p>
+<div class="section" id="flexui">
+<h2>5-1. FlexのUIを立ち上げる<a class="headerlink" href="#flexui" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="https://www.twilio.com/console">https://www.twilio.com/console</a>に遷移し、<code class="docutils literal notranslate"><span class="pre">Launch</span> <span class="pre">Flex</span></code>をクリックします。</p>
+<p><img alt="step3_1" src="../_images/step3_1.png" /></p>
+<p>Flex UIページが立ち上がります。</p>
+<p><img alt="step3_2" src="../_images/step3_2.png" /></p>
+</div>
+<div class="section" id="id1">
+<h2>5-2. ステータスの変更<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Flexにログインしているワーカー(ユーザー)のステータスを確認します。</p>
+<p><img alt="step3_3" src="../_images/step3_3.png" /></p>
+<p>画像のように<code class="docutils literal notranslate"><span class="pre">Offline</span></code>になっている場合は、左上の箇所をクリックして<code class="docutils literal notranslate"><span class="pre">Avaliavle</span></code>に変更します。</p>
+<p><code class="docutils literal notranslate"><span class="pre">Offline</span></code>だと着信を受けることができません。</p>
+</div>
+<div class="section" id="id2">
+<h2>5-3. 電話をかけてみよう<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>[4-2. 日本の電話番号の取得] で購入した電話番号に電話をかけてみましょう。</p>
+<p>現在有効な電話番号は、<a class="reference external" href="https://www.twilio.com/console/phone-numbers/incoming">https://www.twilio.com/console/phone-numbers/incoming</a>で確認できます。</p>
+<p><img alt="step3_4" src="../_images/step3_4.png" /></p>
+<p>着信中、FlexのUIでは以下の画像のように表示されます。</p>
+<p><img alt="step3_5" src="../_images/step3_5.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">Accept</span></code>をクリックすると実際に通話できます。</p>
+<p><img alt="step3_6" src="../_images/step3_6.png" /></p>
+<p>ワーカー側の画面は上記のように変化します。</p>
+</div>
+<div class="section" id="id3">
+<h2>5-4. チャットをしてみよう<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Flexをデプロイするとデフォルトでチャットも使用できます。</p>
+<p><a class="reference external" href="https://flex.twilio.com/admin/">https://flex.twilio.com/admin/</a> の　WEBCHATの<code class="docutils literal notranslate"><span class="pre">LAUNCH</span></code>をクリックします。</p>
+<p><img alt="step3_7" src="../_images/step3_7.png" /></p>
+<p>クライアント(エンドユーザー)用のサンプル画面が起動します。</p>
+<p><img alt="step3_8" src="../_images/step3_8.png" /></p>
+<p>サンプル画面で何か文字を打ってみると、
+Flex UIでは電話の時と同じで着信を受けるか受けないか選択できます。</p>
+<p><img alt="step3_9" src="../_images/step3_9.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">Accept</span></code>をクリックすると、ワーカーは以下のような画面に遷移します。</p>
+<p><img alt="step3_10" src="../_images/step3_10.png" /></p>
+<p>クライアント側が送ったメッセージが表示されています。
+実際に返信してみましょう。</p>
+<p><img alt="step3_11" src="../_images/step3_11.png" /></p>
+<p>お互いの画面で入力した文字が同期されていることがわかります。</p>
+</div>
+<div class="section" id="web">
+<h2>5-5. チャットをWebサイトに埋め込む<a class="headerlink" href="#web" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Flexが用意しているチャットウェジェットをWebサイトに埋め込む方法を紹介します。</p>
+<p>参考: <a class="reference external" href="https://www.twilio.com/docs/flex/webchat/setup">https://www.twilio.com/docs/flex/webchat/setup</a></p>
+<p>CDN, npmを使う方法が現在提供されていますが、本ハンズオンではCDN の方を試します。</p>
+<div class="section" id="index-html">
+<h3>1. index.htmlを作成<a class="headerlink" href="#index-html" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>自身のPCで以下の内容でindex.htmlを作成します。</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;IE=edge&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;description&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;author&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">&gt;</span>
+<span class="c">&lt;!--[if lt IE 9]&gt;</span>
+<span class="c">&lt;script src=&quot;//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js&quot;&gt;&lt;/script&gt;</span>
+<span class="c">&lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js&quot;&gt;&lt;/script&gt;</span>
+<span class="c">&lt;![endif]--&gt;</span>
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;shortcut icon&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Webチャットサンプル<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+	
+	<span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>ここにチャットウィジェットを表示させます<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="headscript">
+<h3>2. headにscriptタグを貼り付ける<a class="headerlink" href="#headscript" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>作成したhtmlのheadの部分に以下のタグを貼り付けます</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://media.twiliocdn.com/sdk/js/flex-webchat/releases/2.1.2/twilio-flex-webchat.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="webscript">
+<h3>3. Webチャットの初期設定を行うscriptタグを貼り付ける<a class="headerlink" href="#webscript" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>作成したhtmlのbodyの中に以下のタグを貼り付けます。</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="kr">const</span> <span class="nx">appConfig</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">accountSid</span><span class="o">:</span><span class="s2">&quot;AC...&quot;</span><span class="p">,</span>
+        <span class="nx">flexFlowSid</span><span class="o">:</span><span class="s2">&quot;FO...&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">Twilio</span><span class="p">.</span><span class="nx">FlexWebChat</span><span class="p">.</span><span class="nx">renderWebChat</span><span class="p">(</span><span class="nx">appConfig</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">accountSid</span></code>と<code class="docutils literal notranslate"><span class="pre">flexFlowSid</span></code>は自身の作成したFlexプロジェクトのものに変更します。</p>
+<p><a class="reference external" href="https://flex.twilio.com/admin/developers/">https://flex.twilio.com/admin/developers/</a>で見つけることができます。</p>
+</div>
+<div class="section" id="id4">
+<h3>4. 表示させて確認してみる<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>お使いのブラウザでindex.htmlを開いてみます。</p>
+<p><img alt="step3_12" src="../_images/step3_12.png" /></p>
+<p>右下に<code class="docutils literal notranslate"><span class="pre">Chat</span> <span class="pre">with</span> <span class="pre">us</span></code>というボタンがあるのでクリックします。</p>
+<p>するとメッセージが打てるウィジェットが起動するので、先ほどと同じように何か文字を打ってFlex上でも確認してみましょう。</p>
+<p>この章は以上で終了になります。</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="step4.html" class="btn btn-neutral float-right" title="6. ルーティングを作ってみる" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="step2.html" class="btn btn-neutral float-left" title="4. 日本の電話番号を取得する" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, classmethod Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

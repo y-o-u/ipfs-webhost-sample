@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@sphinxjp" />
+    <meta property="og:site_name" content="twilioflex-handson  ドキュメント">
+    <meta property="og:title" content="7. エージェントのスキルに基づいて着信をルーティングする">
+    <meta property="og:description" content="Flexデプロイ時に組み込まれているIVRを編集し、発信者がAWSとGCPのどちらかを選択し、そのスキルを持つエージェントにコールをルーティングするようにしてみます。 本ハンズオンではStudioという機能を使って作ります。 Twilio Studioはカスタマーコミュニケーションのデザイン、デプロイ、およびスケールを行うためのビジュアルインターフェイスです。 Twilio Engageme...">
+    <meta property='og:url' content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/pages/step5.html">
+    <meta property="og:image" content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/_images/step5_1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7. エージェントのスキルに基づいて着信をルーティングする &mdash; twilioflex-handson  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="8. CRMとの統合(Zendesk)" href="step6.html" />
+    <link rel="prev" title="6. ルーティングを作ってみる" href="step4.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> twilioflex-handson
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../main.html">Twilio Flex ハンズオン手順書</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirement.html">1. 前提条件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. 本ハンズオンに関して</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step1.html">3. Flexプロジェクトの作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step2.html">4. 日本の電話番号を取得する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step3.html">5. Flexで着信を確認する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step4.html">6. ルーティングを作ってみる</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. エージェントのスキルに基づいて着信をルーティングする</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#voice-ivr">7-1. Voice IVRの編集</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#awsgcp">AWSとGCP用</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">着信を一旦受け付ける用</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">ボタンプッシュを分割する用</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">残りのウィジェットをつなげる</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">7-2. 実際に電話してみよう</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step6.html">8. CRMとの統合(Zendesk)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">twilioflex-handson</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>7. エージェントのスキルに基づいて着信をルーティングする</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/step5.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>7. エージェントのスキルに基づいて着信をルーティングする<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>Flexデプロイ時に組み込まれているIVRを編集し、発信者が<code class="docutils literal notranslate"><span class="pre">AWS</span></code>と<code class="docutils literal notranslate"><span class="pre">GCP</span></code>のどちらかを選択し、そのスキルを持つエージェントにコールをルーティングするようにしてみます。</p>
+<p>本ハンズオンではStudioという機能を使って作ります。</p>
+<blockquote>
+<div><p>Twilio Studioはカスタマーコミュニケーションのデザイン、デプロイ、およびスケールを行うためのビジュアルインターフェイスです。 Twilio Engagement Cloudに新しく加わったTwilio Studioは、何百万という組織横断的なチームメンバーがカスタマーコミュニケーションをデザイン、デプロイ、スケーリングを行うパワーをもたらします。 これにより企業は、全組織におけるクリエイティブな才能を活用して顧客エンゲージメントのロードマップをすばやくトラッキングできるようになります。</p>
+</div></blockquote>
+<p>参考: <a class="reference external" href="https://jp.twilio.com/docs/studio/user-guide">https://jp.twilio.com/docs/studio/user-guide</a></p>
+<div class="section" id="voice-ivr">
+<h2>7-1. Voice IVRの編集<a class="headerlink" href="#voice-ivr" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="https://www.twilio.com/console/studio">https://www.twilio.com/console/studio</a>に遷移し、<code class="docutils literal notranslate"><span class="pre">Voice</span> <span class="pre">IVR</span></code>をクリックします。</p>
+<div class="section" id="awsgcp">
+<h3>AWSとGCP用<a class="headerlink" href="#awsgcp" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><img alt="step5_1" src="../_images/step5_1.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">Enqueue</span> <span class="pre">Call</span></code>ウィジェットをカンバスにドラックします。</p>
+<p><img alt="step5_2" src="../_images/step5_2.png" /></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WIDGET</span> <span class="pre">NAME</span></code>: <code class="docutils literal notranslate"><span class="pre">AWSCall</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TASK</span> <span class="pre">ROUTER</span> <span class="pre">WORKSPACE</span></code>: <code class="docutils literal notranslate"><span class="pre">Flex</span> <span class="pre">Task</span> <span class="pre">Assignment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TASK</span> <span class="pre">ROUTER</span> <span class="pre">WORKFLOW</span></code>: <code class="docutils literal notranslate"><span class="pre">Assign</span> <span class="pre">to</span> <span class="pre">AWS</span></code></p></li>
+</ul>
+<p>に設定し保存します。</p>
+<p><img alt="step5_3" src="../_images/step5_3.png" /></p>
+<p>GCP用も同じように作成します。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WIDGET</span> <span class="pre">NAME</span></code>: <code class="docutils literal notranslate"><span class="pre">GCPCall</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TASK</span> <span class="pre">ROUTER</span> <span class="pre">WORKSPACE</span></code>: <code class="docutils literal notranslate"><span class="pre">Flex</span> <span class="pre">Task</span> <span class="pre">Assignment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TASK</span> <span class="pre">ROUTER</span> <span class="pre">WORKFLOW</span></code>: <code class="docutils literal notranslate"><span class="pre">Assign</span> <span class="pre">to</span> <span class="pre">GCP</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h3>着信を一旦受け付ける用<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Gather</span> <span class="pre">Input</span> <span class="pre">on</span> <span class="pre">Call</span></code>ををカンバスにドラックします。</p>
+<p><img alt="step5_4" src="../_images/step5_4.png" /></p>
+<p>着信時に自動応答するように以下の設定をします。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WIDGET</span> <span class="pre">NAME</span></code>: 任意の名前</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SAY</span> <span class="pre">OR</span> <span class="pre">PLAY</span> <span class="pre">MESSAGE</span></code>: <code class="docutils literal notranslate"><span class="pre">Say</span> <span class="pre">a</span> <span class="pre">Message</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEXT</span> <span class="pre">TO</span> <span class="pre">SAY</span></code>: AWSは1, GCPは2を押してくださいといったメッセージを入力する</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LANGUAGE</span></code>: <code class="docutils literal notranslate"><span class="pre">TEXT</span> <span class="pre">TO</span> <span class="pre">SAY</span></code>に入力したメッセージの言語を選択</p></li>
+</ul>
+<p><img alt="step5_5" src="../_images/step5_5.png" /></p>
+</div>
+<div class="section" id="id3">
+<h3>ボタンプッシュを分割する用<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Split</span> <span class="pre">Based</span> <span class="pre">On...</span></code>ををカンバスにドラックします。</p>
+<p><img alt="step5_6" src="../_images/step5_6.png" /></p>
+<p>以下の設定をして保存します。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WIDGET</span> <span class="pre">NAME</span></code>: <code class="docutils literal notranslate"><span class="pre">split_keys</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VARIABLE</span> <span class="pre">TO</span> <span class="pre">TEST</span></code>: <code class="docutils literal notranslate"><span class="pre">widgets.gather_1.Digits</span></code></p></li>
+</ul>
+<p><img alt="step5_7" src="../_images/step5_7.png" /></p>
+<p>着信を分岐させる設定を行います。</p>
+<p><code class="docutils literal notranslate"><span class="pre">New</span></code>をクリックし,<code class="docutils literal notranslate"><span class="pre">Condition</span> <span class="pre">Matches</span></code>をクリックします。</p>
+<p><img alt="step5_9" src="../_images/step5_9.png" /></p>
+<p>条件として
+<code class="docutils literal notranslate"><span class="pre">Equal</span> <span class="pre">TO</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">AWSCall</span></code>
+を設定して保存します。</p>
+<p><img alt="step5_10" src="../_images/step5_10.png" /></p>
+<p>GCPの方も追加しましょう。</p>
+<p><code class="docutils literal notranslate"><span class="pre">NO</span> <span class="pre">CONDITION</span> <span class="pre">MATCHES</span></code>には既存の<code class="docutils literal notranslate"><span class="pre">SendCallToAgent</span></code>にします。</p>
+<p>カンバス上は以下のようになるはずです</p>
+<p><img alt="step5_11" src="../_images/step5_11.png" /></p>
+</div>
+<div class="section" id="id4">
+<h3>残りのウィジェットをつなげる<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Triggerの<code class="docutils literal notranslate"><span class="pre">Incoming</span> <span class="pre">Call</span></code>を<code class="docutils literal notranslate"><span class="pre">gather_1</span></code>に、</p>
+<p><code class="docutils literal notranslate"><span class="pre">gather_1</span></code>の<code class="docutils literal notranslate"><span class="pre">User</span> <span class="pre">Pressed</span> <span class="pre">Keys</span></code>を<code class="docutils literal notranslate"><span class="pre">split_keys</span></code>につなげます</p>
+<p>全体図は以下のようになるはずです。</p>
+<p><img alt="step5_12" src="../_images/step5_12.png" /></p>
+<p>最後に<code class="docutils literal notranslate"><span class="pre">Publish</span></code>をクリックして反映させます</p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>7-2. 実際に電話してみよう<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>自動応答とプッシュ番号によるルーティングを作成しました。</p>
+<p>実際にFlexに設定されている番号に電話をかけて試してみましょう</p>
+<p>この章は以上で終了になります。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="step6.html" class="btn btn-neutral float-right" title="8. CRMとの統合(Zendesk)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="step4.html" class="btn btn-neutral float-left" title="6. ルーティングを作ってみる" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, classmethod Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

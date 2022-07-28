@@ -1,0 +1,28 @@
+.. twilioflex-handson documentation master file, created by
+   sphinx-quickstart on Fri Apr 17 13:14:57 2020.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to twilioflex-handson's documentation!
+==============================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   main
+   pages/requirement
+   pages/overview
+   pages/step1
+   pages/step2
+   pages/step3
+   pages/step4
+   pages/step5
+   pages/step6
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

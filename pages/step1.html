@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@sphinxjp" />
+    <meta property="og:site_name" content="twilioflex-handson  ドキュメント">
+    <meta property="og:title" content="3. Flexプロジェクトの作成">
+    <meta property="og:description" content="この章ではコンタクトセンターとなるFlexを構築するための手順を説明します。">
+    <meta property='og:url' content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/pages/step1.html">
+    <meta property="og:image" content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/_images/step1_1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. Flexプロジェクトの作成 &mdash; twilioflex-handson  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="4. 日本の電話番号を取得する" href="step2.html" />
+    <link rel="prev" title="2. 本ハンズオンに関して" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> twilioflex-handson
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../main.html">Twilio Flex ハンズオン手順書</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirement.html">1. 前提条件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. 本ハンズオンに関して</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Flexプロジェクトの作成</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#twilio">3-1. Twilioにログイン</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#https-www-twilio-com-login">1. https://www.twilio.com/login に遷移し、ログインします</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3-2. プロジェクト作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#https-www-twilio-com-console">1 . **https://www.twilio.com/console**に遷移します。</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2 . ページの左側にあるメニューを表示させて<code class="docutils literal notranslate"><span class="pre">Flex</span></code>をクリックします</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-my-flex-project">3 .  <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">My</span> <span class="pre">Flex</span> <span class="pre">Project</span></code> をクリックします</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verify">4 .  任意のプロジェクト名を入力し、<code class="docutils literal notranslate"><span class="pre">Verify</span></code> をクリックします</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">5 . 電話番号の確認を行います</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">6 . コードの検証</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">3-3. プロジェクトのコンソールの確認</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#policy">3-4. Policyへの同意</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step2.html">4. 日本の電話番号を取得する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step3.html">5. Flexで着信を確認する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step4.html">6. ルーティングを作ってみる</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step5.html">7. エージェントのスキルに基づいて着信をルーティングする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step6.html">8. CRMとの統合(Zendesk)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">twilioflex-handson</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>3. Flexプロジェクトの作成</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/step1.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="flex">
+<h1>3. Flexプロジェクトの作成<a class="headerlink" href="#flex" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>この章ではコンタクトセンターとなるFlexを構築するための手順を説明します。</p>
+<div class="section" id="twilio">
+<h2>3-1. Twilioにログイン<a class="headerlink" href="#twilio" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="https-www-twilio-com-login">
+<h3>1. <a class="reference external" href="https://www.twilio.com/login">https://www.twilio.com/login</a> に遷移し、ログインします<a class="headerlink" href="#https-www-twilio-com-login" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><img alt="login_email" src="../_images/step1_1.png" />
+<img alt="login_pass" src="../_images/step1_2.png" /></p>
+<p>Email, Password を入力してログインします。</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>3-2. プロジェクト作成<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="https-www-twilio-com-console">
+<h3>1 . **<a class="reference external" href="https://www.twilio.com/console">https://www.twilio.com/console</a>**に遷移します。<a class="headerlink" href="#https-www-twilio-com-console" title="このヘッドラインへのパーマリンク">¶</a></h3>
+</div>
+<div class="section" id="id2">
+<h3>2 . ページの左側にあるメニューを表示させて<code class="docutils literal notranslate"><span class="pre">Flex</span></code>をクリックします<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><img alt="flex_1" src="../_images/step1_3.png" />
+<img alt="flex_2" src="../_images/step1_4.png" /></p>
+</div>
+<div class="section" id="create-my-flex-project">
+<h3>3 .  <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">My</span> <span class="pre">Flex</span> <span class="pre">Project</span></code> をクリックします<a class="headerlink" href="#create-my-flex-project" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><img alt="flex_3" src="../_images/step1_5.png" /></p>
+</div>
+<div class="section" id="verify">
+<h3>4 .  任意のプロジェクト名を入力し、<code class="docutils literal notranslate"><span class="pre">Verify</span></code> をクリックします<a class="headerlink" href="#verify" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>※ 半角全角英数字が可能
+<img alt="flex_4" src="../_images/step1_6.png" /></p>
+</div>
+<div class="section" id="id3">
+<h3>5 . 電話番号の確認を行います<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>日本を選択し、所有する電話番号を入力して<code class="docutils literal notranslate"><span class="pre">Verify</span></code>をクリックします。</p>
+<p><code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">phone</span> <span class="pre">number</span> <span class="pre">you</span> <span class="pre">provide</span> <span class="pre">will　〜〜〜</span></code>　のチェックボックスにチェックを入れてください。</p>
+<p>推奨: 携帯電話の番号(SMSで送信されてきます)</p>
+<p><img alt="flex_5" src="../_images/step1_7.png" /></p>
+</div>
+<div class="section" id="id4">
+<h3>6 . コードの検証<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>入力した電話番号にTwilioからコードが送られてきます。</p>
+<p>入力して<code class="docutils literal notranslate"><span class="pre">Verify</span></code>をクリックします。</p>
+<p><img alt="flex_6" src="../_images/step1_8.png" /></p>
+<p>検証が終わると、自動的にTwilio Flexのデプロイが行われます。</p>
+<p><img alt="flex_7" src="../_images/step1_9.png" />
+デプロイ中の画面</p>
+<p>デプロイが完了すると、自動的にFlexのUIにリダイレクトされます。</p>
+<p><img alt="flex_8" src="../_images/step1_10.png" /></p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>3-3. プロジェクトのコンソールの確認<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ブラウザの別タブで <a class="reference external" href="https://www.twilio.com/console">https://www.twilio.com/console</a> を開きます。</p>
+<p><img alt="flex_9" src="../_images/step1_11.png" /></p>
+<p>作成したFlexプロジェクトになっていることを確認します。
+なっていない場合は画面左上から切り替えます。</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">ACCOUNT</span> <span class="pre">SID</span></code> に表示されている文字列を控えます。</strong></p>
+<p>※ 本ハンズオンを円滑に進めるために必要になります</p>
+</div>
+<div class="section" id="policy">
+<h2>3-4. Policyへの同意<a class="headerlink" href="#policy" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ブラウザの別タブで <a class="reference external" href="https://www.twilio.com/console/flex/fair-usage-policy">https://www.twilio.com/console/flex/fair-usage-policy</a> を開きます。</p>
+<p><img alt="flex_10" src="../_images/step2_13.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">agree</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">Flex</span> <span class="pre">Fair</span> <span class="pre">Usage</span> <span class="pre">Policy</span></code>にチェックを付け、<code class="docutils literal notranslate"><span class="pre">Submit</span></code>をクリックします。</p>
+<p>この章は以上で終了になります。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="step2.html" class="btn btn-neutral float-right" title="4. 日本の電話番号を取得する" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="2. 本ハンズオンに関して" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, classmethod Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

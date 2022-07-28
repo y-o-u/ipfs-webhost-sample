@@ -1,0 +1,140 @@
+# 6. ルーティングを作ってみる
+
+FlexにはTaskRouterという機能があり、それを使うことで、
+顧客からサポート担当者への通話の振り分けを自動化することができます。
+
+>TaskRouterとは、あらゆるタイプのタスクを、それらを最も適切に処理できる人とプロセスに割り当てるためのシステムです。
+
+![TaskRouter](
+https://assets.twilio.com/public_assets/flex-vnv-console/0.54.0/taskrouter-diagram.png "TaskRouter")
+
+この章では、
+- コールセンターにエージェントを追加し、2人のWokerに異なるスキルを割り当てます
+- Twilio Studioで設計されたIVRを変更して、Twilio TaskRouterで定義された2つのキューに会話を渡します
+  - ※ 自動音声を使い顧客を専用の担当者と会話させる
+
+
+## 6-1. Workspaceの構成
+
+TaskRouterに指示を与えてタスクを処理するには`Workspace`というものが必要になります。
+
+Flexのデプロイ時に初期で作られています。
+本ハンズオンではそれを使います。
+
+[https://www.twilio.com/console/taskrouter/workspaces](https://www.twilio.com/console/taskrouter/workspaces)に遷移すると`Workspace`の一覧が表示されています。
+
+![step4_1](../images/step4_1.png "step4_1")
+
+`Workspace`の要素として以下のものがあります。
+
+- `Tasks`
+  - 担当者に連絡しようとしている顧客を表します
+- `Workers`
+  - Taskをこなすべき担当者
+- `TaskQueues`
+  - 複数のWorkerによって処理されるTasksを保持
+- `Workflows`
+  - TasksをTaskQueuesに配置する役目を負います
+- `Activities`
+  - Workerの状態の候補で、たとえば待機中、オフライン、取り込み中、などです
+
+これらを構成していくことになります、
+
+## 6-2. ユーザーの追加
+
+Flexプロジェクトにもう一人管理ユーザーを追加します。
+
+※ 本番環境では、SSOユーザーサインインを使用してFlexエージェントを管理する必要があります
+
+[https://www.twilio.com/console/project/users](https://www.twilio.com/console/project/users)に遷移し、`+`をクリックします。
+
+![step4_2](../images/step4_2.png "step4_2")
+
+- Email Addressにはアカウント登録した以外のメールアドレスを入力します
+- Roleには`Administrator`にチェックを入れます。
+
+![step4_3](../images/step4_3.png "step4_3")
+
+受信したメールで新しいユーザーの確認をします。
+
+その後、シークレットウィンドウか別のアドレスでログインし、
+Flex UIを起動します。
+
+この時点では2人のユーザーがFlexにログインしている状態になります。
+
+## 6-3. エージェントにSkillを割り当てる
+
+2つのスキルを作成して、エージェントに割り当てます。
+
+元の管理者のFlexインスタンスウィンドウから[Flex管理ペイン](https://flex.twilio.com/admin)に移動し, `SKILLS`をクリックします。
+
+![step4_4](../images/step4_4.png "step4_4")
+
+左側の`ADD NEW SKILL`で`AWS`と`GCP`という名前のスキルを作成します。
+
+![step4_5](../images/step4_5.png "step4_5")
+
+[チーム画面](https://flex.twilio.com/teams/workers/)にいき、プルダウンメニューを`All Agents`に変更します
+
+![step4_6](../images/step4_6.png "step4_6")
+
+エージェント一人に`AWS`, もう一人に`GCP`のスキルを設定します。
+
+![step4_7](../images/step4_7.png "step4_7")
+
+## 6-4. TaskRouterを使用してTaskQueuesの作成
+
+`AWS`、`GCP`のスキルがついている人に着信をルーティングする設定を行います。
+
+元の管理者のFlexインスタンスウィンドウから[Flex管理ペイン](https://flex.twilio.com/admin)に移動し, `ROUTING`をクリックします。
+
+![step4_8](../images/step4_8.png "step4_8")
+
+workspacesの一覧画面に遷移するので、表示されている`Flex Task Assignment`をクリックします。
+
+![step4_9](../images/step4_9.png "step4_9")
+
+#### TaskQueueの作成
+
+`View all TaskQueues`をクリックします、
+
+![step4_10](../images/step4_10.png "step4_10")
+
+`+`をクリックして新しいTaskQueueを作成します。
+AWSとGCPの2つ作ってください。
+
+- `TASKQUEUE NAME`
+  - `AWS`
+  - `GCP`
+- `QUEUE EXPRESSION`
+  - `(routing.skills HAS 'AWS')`
+  - `(routing.skills HAS 'GCP')`
+
+![step4_11](../images/step4_11.png "step4_11")
+
+#### Workflowの作成
+左側のメニューにある`Workflows`をクリックします。
+`+`をクリックして新しいWorkflowを作成します。
+
+![step4_12](../images/step4_12.png "step4_12")
+
+AWSとGCPの2つ作ってください。
+
+- `WORKFLOW NAME`
+  - `Assign to AWS`
+  - `Assign to GCP`
+
+同じ画面の`ADD a Filter`をクリックしてフィルターを作成します。
+
+![step4_13](../images/step4_13.png "step4_13")
+
+`MATCHING WORKERS`の見出しの下で、`QUEUE`フィールドをクリックして編集します。それを`AWS`/`GCP`に設定し、チェックボックスをクリックして保存します。
+
+![step4_14](../images/step4_14.png "step4_14")
+
+
+かなり基本的な手順ですが、Skill、Workflow、TaskQueueの組み合わせを使用して非常に複雑なワークフローを設定できます.
+
+
+この章は以上で終了になります。
+

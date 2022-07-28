@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@sphinxjp" />
+    <meta property="og:site_name" content="twilioflex-handson  ドキュメント">
+    <meta property="og:title" content="8. CRMとの統合(Zendesk)">
+    <meta property="og:description" content="これまでの章でエンドユーザーからの着信をコンタクトセンターのエージェントが受ける　というフローの構築を行いました。 本番環境でのコンタクトセンターではこれだけではなく顧客管理が必要になってきます。 Twilio Flexには顧客管理する機能を持っていないのですが、
+CRMとの連携をすることによって可能になります。 特徴 本ハンズオンではZendeskとの統合を行います。 Zendesk上でエ...">
+    <meta property='og:url' content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/pages/step6.html">
+    <meta property="og:image" content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/_images/step6_1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>8. CRMとの統合(Zendesk) &mdash; twilioflex-handson  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="7. エージェントのスキルに基づいて着信をルーティングする" href="step5.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> twilioflex-handson
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../main.html">Twilio Flex ハンズオン手順書</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirement.html">1. 前提条件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. 本ハンズオンに関して</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step1.html">3. Flexプロジェクトの作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step2.html">4. 日本の電話番号を取得する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step3.html">5. Flexで着信を確認する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step4.html">6. ルーティングを作ってみる</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step5.html">7. エージェントのスキルに基づいて着信をルーティングする</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. CRMとの統合(Zendesk)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#flex">8-1. Flex側のセットアップ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1. Flexにアクセス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2. 設定を行う</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#click-to-dial">3. (オプション)Click to Dial</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#zendesk">8-2. Zendesk側のセットアップ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zendesk-marketplace">1. Zendesk Marketplace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install">2. installと設定</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#flex-zendesk">8-3. Flex-Zendeskコールフローの確認とカスタマイズ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1. デフォルトの状態</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2. カスタマイズする</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#flex-flowvoice-ivr">1. Flex Flow画面から、「Voice IVR」フローを選択します</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gather-input-on-call-widget">2. Gather Input on Call Widgetを追加</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#task-attributes">3. TASK ATTRIBUTESの修正</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">3. 着信の確認</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#zendeskivr">4. (参考) Zendeskチケットにカスタムタグを追加するためのIVRフロー</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">twilioflex-handson</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>8. CRMとの統合(Zendesk)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/step6.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="crm-zendesk">
+<h1>8. CRMとの統合(Zendesk)<a class="headerlink" href="#crm-zendesk" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>これまでの章でエンドユーザーからの着信をコンタクトセンターのエージェントが受ける　というフローの構築を行いました。</p>
+<p>本番環境でのコンタクトセンターではこれだけではなく顧客管理が必要になってきます。</p>
+<p>Twilio Flexには顧客管理する機能を持っていないのですが、
+CRMとの連携をすることによって可能になります。</p>
+<p><a class="reference external" href="https://www.twilio.com/docs/flex/integrations/zendesk#set-up-taskrouter-for-outbound-calling">特徴</a></p>
+<p>本ハンズオンではZendeskとの統合を行います。</p>
+<p>Zendesk上でエンドユーザーからの着信を受け取り、サポートチケットが起票されることを確認します。</p>
+<div class="section" id="flex">
+<h2>8-1. Flex側のセットアップ<a class="headerlink" href="#flex" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id1">
+<h3>1. Flexにアクセス<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>管理者として<a class="reference external" href="https://flex.twilio.com">https://flex.twilio.com</a>にアクセスします</p>
+<p><code class="docutils literal notranslate"><span class="pre">INTEGRATIONS</span></code>にある<code class="docutils literal notranslate"><span class="pre">CONFIGURE</span></code>をクリックします。</p>
+<p><img alt="step6_1" src="../_images/step6_1.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">INTEGRATIONS</span></code>の画面で<code class="docutils literal notranslate"><span class="pre">Zendesk</span></code>を選択します。</p>
+<p><img alt="step6_2" src="../_images/step6_2.png" /></p>
+</div>
+<div class="section" id="id2">
+<h3>2. 設定を行う<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>設定名</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STATUS</td>
+<td>統合を有効にするかどうか</td>
+</tr>
+<tr>
+<td>Workflow SID</td>
+<td>デフォルトのワークフローとは異なるワークフローを使用する場合は、ここにワークフローSIDを入力してください。そうでない場合は、空のままにします</td>
+</tr>
+<tr>
+<td>Task Channel SID</td>
+<td>デフォルトの音声チャネルとは異なるタスクチャネルを使用する場合は、ここにタスクチャネルSIDを指定してください。そうでない場合は、空のままにします</td>
+</tr>
+<tr>
+<td>Agent Caller ID</td>
+<td>エージェントが発信者IDを定義していない場合、Flex-Zendeskインテグレーションからの（Click to Dialを介した）アウトバウンドコールに使用される発信者ID。</td>
+</tr>
+<tr>
+<td>Zendesk Base URL</td>
+<td>ZendeskドメインURL</td>
+</tr>
+<tr>
+<td>RECORDING</td>
+<td>インバウンド音声録音を有効, 内部メモとしてチャットの詳細をログに記録</td>
+</tr>
+<tr>
+<td>New ticket description</td>
+<td>Flexによる自動チケット作成に使用される説明</td>
+</tr>
+<tr>
+<td>New ticket subject</td>
+<td>Flexによる自動チケット作成に使用されるサブジェクト</td>
+</tr>
+<tr>
+<td>LOG</td>
+<td>タスクのメタデータを関連するZendeskチケットに「内部メモ」として記録する必要がある場合、タスクのステージを設定できます。3つのステージのいずれかを選択することも、まったく選択しないこともできます。<br><br>  - タスクの開始：エージェントがタスクを受け入れるときにログに記録します。<br>  - タスク切り替え：エージェントがタスクを選択したときにログに記録します。マルチタスク設定で特に役立ちます<br>  - タスク完了：エージェントがタスクを完了したときにログに記録します。</td>
+</tr>
+<tr>
+<td>NAVIGATE</td>
+<td>エージェントがタスクを承諾/選択するときにScreenpopの性質を選択します <br><br> - エージェント画面にチケットを表示する<br> - エージェント画面にユーザーを表示する<br> - 何も表示しない</td>
+</tr>
+<tr>
+<td>CREATE</td>
+<td>新しいチケットまたはユーザーを作成するかどうか、いつ作成するかを選択します。無効なチケット番号が提供された場合、または提供されなかった場合、次のことを選択できます<br><br> - 新しいチケットを作成する<br> - ユーザーが不明な場合は、新しいユーザーを作成します。</td>
+</tr>
+</tbody>
+</table><p><img alt="step6_3" src="../_images/step6_3.png" /></p>
+</div>
+<div class="section" id="click-to-dial">
+<h3>3. (オプション)Click to Dial<a class="headerlink" href="#click-to-dial" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>エージェントがボタンをクリックするだけでアウトバウンドコールを発信できるようにする機能ですが、ベータ版のため割愛します。</p>
+<p><a class="reference external" href="https://www.twilio.com/docs/flex/integrations/zendesk#set-up-taskrouter-for-outbound-calling">公式手順</a></p>
+</div>
+</div>
+<div class="section" id="zendesk">
+<h2>8-2. Zendesk側のセットアップ<a class="headerlink" href="#zendesk" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="zendesk-marketplace">
+<h3>1. Zendesk Marketplace<a class="headerlink" href="#zendesk-marketplace" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Twilio Flexと連携したいZendeskにログインした状態で、Zendesk Marketplaceに遷移します。</p>
+<p><a class="reference external" href="https://www.zendesk.com/apps/support/twilio-flex">https://www.zendesk.com/apps/support/twilio-flex</a></p>
+<p><img alt="step6_4" src="../_images/step6_4.png" /></p>
+</div>
+<div class="section" id="install">
+<h3>2. installと設定<a class="headerlink" href="#install" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>ページ上部の<code class="docutils literal notranslate"><span class="pre">install</span></code>をクリックします。
+設定画面に遷移するので変更したいパラメーターを記入します。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>設定名</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flex URL</td>
+<td>Hosted Flexを使用する場合はそのままにします。<br>独自のインフラストラクチャでFlexをセルフホスティングする場合は、<br>これをFlexインスタンスのURLに変更する必要があります。<br>不明な場合は、フィールドをそのままにしておきます。 <br>このフィールドは、ZendeskのTwilio Flex Appに、<br>Flexがホストされ利用可能な場所を通知します。</td>
+</tr>
+<tr>
+<td>Flex widget width size (in pixels)</td>
+<td>Zendesk UI内のFlexアプリの幅をピクセル単位で指定します。<br>幅を決定する際に考慮すべき重要なことは、<br>音声以外のチャネルを使用する場合、<br>サポートスタッフに優れたチャットエクスペリエンスを提供するため、<br>より広いFlexアプリが役立つことです。</td>
+</tr>
+<tr>
+<td>Flex widget height size (in pixels)</td>
+<td>(widthと同じ説明)</td>
+</tr>
+</tbody>
+</table><p><img alt="step6_5" src="../_images/step6_5.png" /></p>
+<p>変更後、<code class="docutils literal notranslate"><span class="pre">インストール</span></code>をクリックします。</p>
+<p>インストールが終わると、Zendeskのページ上部にTwilio Flexアプリのアイコンが表示されていて、クリックするとウィジェットが起動します。</p>
+<p><img alt="step6_6" src="../_images/step6_6.png" /></p>
+</div>
+</div>
+<div class="section" id="flex-zendesk">
+<h2>8-3. Flex-Zendeskコールフローの確認とカスタマイズ<a class="headerlink" href="#flex-zendesk" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>着信を受け入れてチケットが発番されるか確認します。</p>
+<div class="section" id="id3">
+<h3>1. デフォルトの状態<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>新しいエンゲージメントごとに新しいチケットが作成されます。</p>
+<p>着信を受け入れると、以下のようになります。</p>
+<p><img alt="step6_7" src="../_images/step6_7.png" /></p>
+</div>
+<div class="section" id="id4">
+<h3>2. カスタマイズする<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>顧客からの着信を受けてチケットが生成されますが、
+エージェントが着信を受けた後、その顧客に関する既存のチケットを表示させたい時もあります。</p>
+<p>これを行うには顧客からのチケット番号を収集するためのIVRフローをカスタムする必要があります。</p>
+<div class="section" id="flex-flowvoice-ivr">
+<h4>1. Flex Flow画面から、「Voice IVR」フローを選択します<a class="headerlink" href="#flex-flowvoice-ivr" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p><a class="reference external" href="https://www.twilio.com/console/studio/dashboard">https://www.twilio.com/console/studio/dashboard</a>に遷移して、<code class="docutils literal notranslate"><span class="pre">Voice</span> <span class="pre">IVR</span></code>をクリックします。</p>
+<p><img alt="step6_8" src="../_images/step6_8.png" /></p>
+</div>
+<div class="section" id="gather-input-on-call-widget">
+<h4>2. Gather Input on Call Widgetを追加<a class="headerlink" href="#gather-input-on-call-widget" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>発信者からチケット番号を収集するために<code class="docutils literal notranslate"><span class="pre">Gather</span> <span class="pre">Input</span> <span class="pre">on</span> <span class="pre">Call</span> <span class="pre">Widget</span></code>を追加します。</p>
+<p><img alt="step6_9" src="../_images/step6_9.png" /></p>
+<p>任意の名前をつけておきます。</p>
+<p>例) getTicketNumber</p>
+<p>以下の図のように、<code class="docutils literal notranslate"><span class="pre">gather_1</span></code>の上に来るようにフローを修正します。</p>
+<p><img alt="step6_10" src="../_images/step6_10.png" /></p>
+</div>
+<div class="section" id="task-attributes">
+<h4>3. TASK ATTRIBUTESの修正<a class="headerlink" href="#task-attributes" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>Voice IVRフローの最後にあるコール部分のウィジェットにある<code class="docutils literal notranslate"><span class="pre">ATTRIBUTES</span></code>を以下の内容に変更し保存します。</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;inbound&quot;</span><span class="p">,</span> <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;{{trigger.call.From}}&quot;</span><span class="p">,</span><span class="nt">&quot;zd_ticket_id&quot;</span> <span class="p">:</span> <span class="s2">&quot;{{widgets.getTicketNumber.Digits}}&quot;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p><img alt="step6_11" src="../_images/step6_11.png" /></p>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>3. 着信の確認<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Flexの電話番号に電話をかけてみます。</p>
+<p>チケット番号を指定すると、新しいチケットの代わりにチケット画面が表示されます。</p>
+<p><img alt="step6_13" src="../_images/step6_13.png" /></p>
+<p>SMS、Whatsapp、Webchatなどのテキストベースのチャネルでメッセージングボットを使用してチケット番号を収集し、そのチケット番号を「zd_ticket_id」タスク属性としてFlexに渡すこともできます。</p>
+</div>
+<div class="section" id="zendeskivr">
+<h3>4. (参考) Zendeskチケットにカスタムタグを追加するためのIVRフロー<a class="headerlink" href="#zendeskivr" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">zdCustomTags</span></code>という名前のタスク属性にタグを追加して、顧客エンゲージメントフローで特定されたカスタムタグを追加できます。</p>
+<p><a class="reference external" href="https://www.twilio.com/docs/flex/integrations/zendesk/customize#ivr-flow-for-adding-custom-tags-to-zendesk-ticket">https://www.twilio.com/docs/flex/integrations/zendesk/customize#ivr-flow-for-adding-custom-tags-to-zendesk-ticket</a></p>
+<p>この章は以上で終了です。</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="step5.html" class="btn btn-neutral float-left" title="7. エージェントのスキルに基づいて着信をルーティングする" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, classmethod Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

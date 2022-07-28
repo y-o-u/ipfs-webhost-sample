@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@sphinxjp" />
+    <meta property="og:site_name" content="twilioflex-handson  ドキュメント">
+    <meta property="og:title" content="4. 日本の電話番号を取得する">
+    <meta property="og:description" content="この章では作成したFlexに紐付ける日本の電話番号の取得を行います。 Flexは立ち上げるとUSの電話番号が取得されます。
+日本から電話をかけるとなると国際電話料金がかかってしまうため、本ハンズオンでは日本の電話番号を取得して使用します。 日本の電話番号を取得する際、国固有の規制により、電話番号のタイプごとに規制バンドルを作成する必要があります。">
+    <meta property='og:url' content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/pages/step2.html">
+    <meta property="og:image" content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/_images/step2_1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4. 日本の電話番号を取得する &mdash; twilioflex-handson  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5. Flexで着信を確認する" href="step3.html" />
+    <link rel="prev" title="3. Flexプロジェクトの作成" href="step1.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> twilioflex-handson
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../main.html">Twilio Flex ハンズオン手順書</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirement.html">1. 前提条件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. 本ハンズオンに関して</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step1.html">3. Flexプロジェクトの作成</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. 日本の電話番号を取得する</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#regulatory-bundles">4-1. Regulatory Bundlesの申請</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#https-www-twilio-com-console">1 . https://www.twilio.com/consoleに遷移します。</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#https-www-twilio-com-console-phone-numbers-regulatory-compliance-bundles">2 . <strong>https://www.twilio.com/console/phone-numbers/regulatory-compliance/bundles</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choose-country-type-of-phone-number-that-needs-to-be-compliant">3 . <strong>Choose Country &amp; Type of phone number that needs to be compliant</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#select-the-end-user-who-will-use-japan-local-phone-numbers">4 . <strong>Select the End-User who will use Japan Local phone numbers</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enter-information-about-the-individual">5 . <strong>Enter information about the individual</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upload-supporting-documents">6 . <strong>Upload Supporting Documents</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#give-this-regulatory-bundle-a-friendly-name-optional">7 . <strong>Give this Regulatory Bundle a Friendly Name (Optional)</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-up-notifications-optional">8 . <strong>Set-up Notifications (Optional)</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">9 . <strong>ステータスの確認</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#address">10. Addressの登録</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">4-2. 日本の電話番号の取得</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#flex">1. Flexプロジェクトのコンソールに遷移</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2. 電話番号の検索</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">3. 購入処理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step3.html">5. Flexで着信を確認する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step4.html">6. ルーティングを作ってみる</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step5.html">7. エージェントのスキルに基づいて着信をルーティングする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step6.html">8. CRMとの統合(Zendesk)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">twilioflex-handson</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>4. 日本の電話番号を取得する</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/step2.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>4. 日本の電話番号を取得する<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>この章では作成したFlexに紐付ける日本の電話番号の取得を行います。</p>
+<p>Flexは立ち上げるとUSの電話番号が取得されます。
+日本から電話をかけるとなると国際電話料金がかかってしまうため、本ハンズオンでは日本の電話番号を取得して使用します。</p>
+<div class="section" id="regulatory-bundles">
+<h2>4-1. Regulatory Bundlesの申請<a class="headerlink" href="#regulatory-bundles" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>日本の電話番号を取得する際、国固有の規制により、電話番号のタイプごとに規制バンドルを作成する必要があります。</p>
+<div class="section" id="https-www-twilio-com-console">
+<h3>1 . <a class="reference external" href="https://www.twilio.com/console">https://www.twilio.com/console</a>に遷移します。<a class="headerlink" href="#https-www-twilio-com-console" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Flexのプロジェクトであることを確認してください。</p>
+</div>
+<div class="section" id="https-www-twilio-com-console-phone-numbers-regulatory-compliance-bundles">
+<h3>2 . <strong><a class="reference external" href="https://www.twilio.com/console/phone-numbers/regulatory-compliance/bundles">https://www.twilio.com/console/phone-numbers/regulatory-compliance/bundles</a></strong><a class="headerlink" href="#https-www-twilio-com-console-phone-numbers-regulatory-compliance-bundles" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>に遷移します</p>
+<p><img alt="step2_1" src="../_images/step2_1.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">a</span> <span class="pre">Regulatory</span> <span class="pre">Bundle</span></code> をクリックします。</p>
+</div>
+<div class="section" id="choose-country-type-of-phone-number-that-needs-to-be-compliant">
+<h3>3 . <strong>Choose Country &amp; Type of phone number that needs to be compliant</strong><a class="headerlink" href="#choose-country-type-of-phone-number-that-needs-to-be-compliant" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PHONE</span> <span class="pre">NUMBER'S</span> <span class="pre">COUNTRY</span></code>　を <code class="docutils literal notranslate"><span class="pre">Japan</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TYPE</span> <span class="pre">OF</span> <span class="pre">PHONE</span> <span class="pre">NUMBER</span></code> を <code class="docutils literal notranslate"><span class="pre">Local</span></code>
+にし, <code class="docutils literal notranslate"><span class="pre">Next</span></code>をクリックします</p></li>
+</ul>
+<p><img alt="step2_2" src="../_images/step2_2.png" /></p>
+</div>
+<div class="section" id="select-the-end-user-who-will-use-japan-local-phone-numbers">
+<h3>4 . <strong>Select the End-User who will use Japan Local phone numbers</strong><a class="headerlink" href="#select-the-end-user-who-will-use-japan-local-phone-numbers" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Individual</span></code>を選択し、<code class="docutils literal notranslate"><span class="pre">Next</span></code>をクリックします</p>
+<p><img alt="step2_3" src="../_images/step2_3.png" /></p>
+</div>
+<div class="section" id="enter-information-about-the-individual">
+<h3>5 . <strong>Enter information about the individual</strong><a class="headerlink" href="#enter-information-about-the-individual" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">FIRST</span> <span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">LAST</span> <span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">BIRTH</span> <span class="pre">DATE</span></code>を入力し、<code class="docutils literal notranslate"><span class="pre">Next</span></code>をクリックします</p>
+<p><img alt="step2_4" src="../_images/step2_4.png" /></p>
+</div>
+<div class="section" id="upload-supporting-documents">
+<h3>6 . <strong>Upload Supporting Documents</strong><a class="headerlink" href="#upload-supporting-documents" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>自信を証明する書類をアップロードします。</p>
+<p>運転免許証かパスポートで問題ありません。</p>
+<p><img alt="step2_5" src="../_images/step2_5.png" />
+<img alt="step2_6" src="../_images/step2_6.png" /></p>
+<p>画像を選択後、</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SUPPORTING</span> <span class="pre">DOCUMENT</span> <span class="pre">FRIENDLY</span> <span class="pre">NAME</span></code> : 任意の名前</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FIRST</span> <span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">LAST</span> <span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">BIRTH</span> <span class="pre">DATE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Does</span> <span class="pre">this</span> <span class="pre">Supporting</span> <span class="pre">Document</span> <span class="pre">also</span> <span class="pre">confirm</span> <span class="pre">the</span> <span class="pre">End-User's</span> <span class="pre">Address?</span></code> : YES</p></li>
+</ul>
+<p><img alt="step2_7" src="../_images/step2_7.png" /></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ADDRESS</span> <span class="pre">FRIENDLY</span> <span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">ADDRESS</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">CITY</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE/PROVINCE/REGION</span></code>, <code class="docutils literal notranslate"><span class="pre">COUNTRY</span></code>, <code class="docutils literal notranslate"><span class="pre">POSTAL</span> <span class="pre">CODE</span></code></p></li>
+</ul>
+<p>を入力します。
+アップロードした証明証と同じ情報にします。</p>
+<p><img alt="step2_8" src="../_images/step2_8.png" /></p>
+<p>入力が終わったら<code class="docutils literal notranslate"><span class="pre">Save</span></code>をクリックします。</p>
+<p><img alt="step2_9" src="../_images/step2_9.png" /></p>
+<p>緑のチェックマークがついていることを確認し、<code class="docutils literal notranslate"><span class="pre">Next</span></code>をクリックします。</p>
+</div>
+<div class="section" id="give-this-regulatory-bundle-a-friendly-name-optional">
+<h3>7 . <strong>Give this Regulatory Bundle a Friendly Name (Optional)</strong><a class="headerlink" href="#give-this-regulatory-bundle-a-friendly-name-optional" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>規制バンドルに任意の名前をつけ,
+<code class="docutils literal notranslate"><span class="pre">Next</span></code>をクリックします。</p>
+<p><img alt="step2_10" src="../_images/step2_10.png" /></p>
+</div>
+<div class="section" id="set-up-notifications-optional">
+<h3>8 . <strong>Set-up Notifications (Optional)</strong><a class="headerlink" href="#set-up-notifications-optional" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>規制バンドルのステータス、停止、および関連する問題に関しての通知を受け取るメールアドレスを入力します。</p>
+<p>その後, <code class="docutils literal notranslate"><span class="pre">Submit</span> <span class="pre">for</span> <span class="pre">review</span></code>をクリックし、申請が完了となります。</p>
+<p><img alt="step2_11" src="../_images/step2_11.png" />
+<img alt="step2_12" src="../_images/step2_12.png" /></p>
+</div>
+<div class="section" id="id2">
+<h3>9 . <strong>ステータスの確認</strong><a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>8が終わると自動的にBundlesの一覧画面に遷移します。</p>
+<p><code class="docutils literal notranslate"><span class="pre">STATUS</span></code>が<code class="docutils literal notranslate"><span class="pre">Pending</span> <span class="pre">Review</span></code>になっているはずです。</p>
+<p>申請が承認されると <code class="docutils literal notranslate"><span class="pre">Twilio</span> <span class="pre">Approved</span></code> になります。</p>
+<p><strong>通常、申請がおりるまで1日程度かかります。</strong></p>
+<p>また、メールでも申請結果が送られてきます。</p>
+</div>
+<div class="section" id="address">
+<h3>10. Addressの登録<a class="headerlink" href="#address" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Regulatory</span> <span class="pre">Bundles</span></code>を作成した時に作られている場合は不要です。そうでなかった場合は作成しましょう。</p>
+<p><a class="reference external" href="https://www.twilio.com/console/phone-numbers/addresses">https://www.twilio.com/console/phone-numbers/addresses</a>　に遷移します。</p>
+<p><code class="docutils literal notranslate"><span class="pre">+</span></code>をクリックし、<code class="docutils literal notranslate"><span class="pre">Regulatory</span> <span class="pre">Bundles</span></code>を申請した時と同じ住所を登録します。</p>
+<p><img alt="step2_19" src="../_images/step2_19.png" /></p>
+<p><img alt="step2_20" src="../_images/step2_20.png" /></p>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>4-2. 日本の電話番号の取得<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>規制バンドルの申請が承認された後、電話番号を購入します。</p>
+<div class="section" id="flex">
+<h3>1. Flexプロジェクトのコンソールに遷移<a class="headerlink" href="#flex" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference external" href="https://www.twilio.com/console">https://www.twilio.com/console</a>で <code class="docutils literal notranslate"><span class="pre">Get</span> <span class="pre">a</span> <span class="pre">Number</span></code>　をクリックします。</p>
+<p><img alt="step2_14" src="../_images/step2_14.png" /></p>
+</div>
+<div class="section" id="id4">
+<h3>2. 電話番号の検索<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Country</span></code>を<code class="docutils literal notranslate"><span class="pre">Japan</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CAPABILITIES</span></code>を<code class="docutils literal notranslate"><span class="pre">Voice</span></code>
+にし、<code class="docutils literal notranslate"><span class="pre">Search</span></code>をクリックします。</p></li>
+</ul>
+<p><img alt="step2_15" src="../_images/step2_15.png" /></p>
+</div>
+<div class="section" id="id5">
+<h3>3. 購入処理<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>一覧に出てきた番号のいずれかの<code class="docutils literal notranslate"><span class="pre">Buy</span></code>をクリックします。</p>
+<p><img alt="step2_16" src="../_images/step2_16.png" /></p>
+<p>購入する電話番号と値段を確認し、<code class="docutils literal notranslate"><span class="pre">Next</span></code>をクリックします。</p>
+<p><img alt="step2_17" src="../_images/step2_17.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">Individual</span></code>を選択し、Nextをクリックします</p>
+<p><img alt="step2_18" src="../_images/step2_18.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">Regulatory</span> <span class="pre">Bundle</span></code>と<code class="docutils literal notranslate"><span class="pre">Address</span> <span class="pre">Requirement</span></code>を事前に準備したものにして<code class="docutils literal notranslate"><span class="pre">Buy</span></code>をクリックします。</p>
+<p><img alt="step2_21" src="../_images/step2_21.png" /></p>
+<p>購入完了後、設定画面に遷移します。</p>
+<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">CALL</span> <span class="pre">COMES</span> <span class="pre">IN</span></code>の項目を以下のように設定して<code class="docutils literal notranslate"><span class="pre">Save</span></code>をクリックして完了です。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Studio</span> <span class="pre">Flow</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Voice</span> <span class="pre">IVR</span></code></p></li>
+</ul>
+<p><img alt="step2_22" src="../_images/step2_22.png" /></p>
+<p>この章は以上で終了になります。</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="step3.html" class="btn btn-neutral float-right" title="5. Flexで着信を確認する" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="step1.html" class="btn btn-neutral float-left" title="3. Flexプロジェクトの作成" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, classmethod Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

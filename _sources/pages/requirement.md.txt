@@ -1,0 +1,17 @@
+# 1. 前提条件
+
+## 1.1 提供リソース
+* ハンズオン手順書(本資料)
+
+## 1.2 ご利用いただくリソース
+- Twilioのアカウント
+  - 無料プランを利用していただきます
+  - [https://jp.twilio.com/try-twilio](https://jp.twilio.com/try-twilio)
+  - 作成する際、本人確認のために電話番号（SMSもしくは電話認証のため）が必要
+- Zendeskのアカウント
+  - 無料トライアルを利用していただきます
+  - [https://www.zendesk.co.jp/register/#step-1](https://www.zendesk.co.jp/register/#step-1)
+- PC
+  - インターネット接続環境
+  - ブラウザ
+    - Chrome・Firefoxの最新版を推奨

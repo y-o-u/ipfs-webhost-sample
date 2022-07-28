@@ -1,0 +1,18 @@
+# Twilio Flex ハンズオン手順書
+
+Twilio Flexを使って簡易的なコンタクトセンターを作るハンズオンです
+
+## 目次
+
+1. [前提条件](pages/requirement.md)
+2. [本ハンズオンについて](pages/overview.md)
+3. [Flexプロジェクトの作成](pages/step1.md)
+4. [日本の電話番号を取得する](pages/step2.md)
+5. [Flexで着信を確認する](pages/step3.md)
+6. [ルーティングを作ってみ](pages/step4.md)
+7. [エージェントのスキルに基づいて着信をルーティングする](pages/step5.md)
+8. [CRMとの統合(Zendesk)](pages/step6.md)
+
+
+## 変更履歴
+- 2020/04/17 初版

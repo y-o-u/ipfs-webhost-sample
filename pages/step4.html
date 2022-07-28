@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@sphinxjp" />
+    <meta property="og:site_name" content="twilioflex-handson  ドキュメント">
+    <meta property="og:title" content="6. ルーティングを作ってみる">
+    <meta property="og:description" content="FlexにはTaskRouterという機能があり、それを使うことで、
+顧客からサポート担当者への通話の振り分けを自動化することができます。 TaskRouterとは、あらゆるタイプのタスクを、それらを最も適切に処理できる人とプロセスに割り当てるためのシステムです。 TaskRouter この章では、 コールセンターにエージェントを追加し、2人のWokerに異なるスキルを割り当てます Twil...">
+    <meta property='og:url' content="http://twilioflex-handson-2020-04.s3-website-ap-northeast-1.amazonaws.com/pages/step4.html">
+    <meta property="og:image" content="https://assets.twilio.com/public_assets/flex-vnv-console/0.54.0/taskrouter-diagram.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6. ルーティングを作ってみる &mdash; twilioflex-handson  ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="7. エージェントのスキルに基づいて着信をルーティングする" href="step5.html" />
+    <link rel="prev" title="5. Flexで着信を確認する" href="step3.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> twilioflex-handson
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../main.html">Twilio Flex ハンズオン手順書</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirement.html">1. 前提条件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">2. 本ハンズオンに関して</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step1.html">3. Flexプロジェクトの作成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step2.html">4. 日本の電話番号を取得する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step3.html">5. Flexで着信を確認する</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. ルーティングを作ってみる</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#workspace">6-1. Workspaceの構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">6-2. ユーザーの追加</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skill">6-3. エージェントにSkillを割り当てる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#taskroutertaskqueues">6-4. TaskRouterを使用してTaskQueuesの作成</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#taskqueue">TaskQueueの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#workflow">Workflowの作成</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step5.html">7. エージェントのスキルに基づいて着信をルーティングする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step6.html">8. CRMとの統合(Zendesk)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">twilioflex-handson</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>6. ルーティングを作ってみる</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pages/step4.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>6. ルーティングを作ってみる<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>FlexにはTaskRouterという機能があり、それを使うことで、
+顧客からサポート担当者への通話の振り分けを自動化することができます。</p>
+<blockquote>
+<div><p>TaskRouterとは、あらゆるタイプのタスクを、それらを最も適切に処理できる人とプロセスに割り当てるためのシステムです。</p>
+</div></blockquote>
+<p><img alt="TaskRouter" src="https://assets.twilio.com/public_assets/flex-vnv-console/0.54.0/taskrouter-diagram.png" /></p>
+<p>この章では、</p>
+<ul class="simple">
+<li><p>コールセンターにエージェントを追加し、2人のWokerに異なるスキルを割り当てます</p></li>
+<li><p>Twilio Studioで設計されたIVRを変更して、Twilio TaskRouterで定義された2つのキューに会話を渡します</p>
+<ul>
+<li><p>※ 自動音声を使い顧客を専用の担当者と会話させる</p></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="workspace">
+<h2>6-1. Workspaceの構成<a class="headerlink" href="#workspace" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>TaskRouterに指示を与えてタスクを処理するには<code class="docutils literal notranslate"><span class="pre">Workspace</span></code>というものが必要になります。</p>
+<p>Flexのデプロイ時に初期で作られています。
+本ハンズオンではそれを使います。</p>
+<p><a class="reference external" href="https://www.twilio.com/console/taskrouter/workspaces">https://www.twilio.com/console/taskrouter/workspaces</a>に遷移すると<code class="docutils literal notranslate"><span class="pre">Workspace</span></code>の一覧が表示されています。</p>
+<p><img alt="step4_1" src="../_images/step4_1.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">Workspace</span></code>の要素として以下のものがあります。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Tasks</span></code></p>
+<ul>
+<li><p>担当者に連絡しようとしている顧客を表します</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Workers</span></code></p>
+<ul>
+<li><p>Taskをこなすべき担当者</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TaskQueues</span></code></p>
+<ul>
+<li><p>複数のWorkerによって処理されるTasksを保持</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Workflows</span></code></p>
+<ul>
+<li><p>TasksをTaskQueuesに配置する役目を負います</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Activities</span></code></p>
+<ul>
+<li><p>Workerの状態の候補で、たとえば待機中、オフライン、取り込み中、などです</p></li>
+</ul>
+</li>
+</ul>
+<p>これらを構成していくことになります、</p>
+</div>
+<div class="section" id="id2">
+<h2>6-2. ユーザーの追加<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Flexプロジェクトにもう一人管理ユーザーを追加します。</p>
+<p>※ 本番環境では、SSOユーザーサインインを使用してFlexエージェントを管理する必要があります</p>
+<p><a class="reference external" href="https://www.twilio.com/console/project/users">https://www.twilio.com/console/project/users</a>に遷移し、<code class="docutils literal notranslate"><span class="pre">+</span></code>をクリックします。</p>
+<p><img alt="step4_2" src="../_images/step4_2.png" /></p>
+<ul class="simple">
+<li><p>Email Addressにはアカウント登録した以外のメールアドレスを入力します</p></li>
+<li><p>Roleには<code class="docutils literal notranslate"><span class="pre">Administrator</span></code>にチェックを入れます。</p></li>
+</ul>
+<p><img alt="step4_3" src="../_images/step4_3.png" /></p>
+<p>受信したメールで新しいユーザーの確認をします。</p>
+<p>その後、シークレットウィンドウか別のアドレスでログインし、
+Flex UIを起動します。</p>
+<p>この時点では2人のユーザーがFlexにログインしている状態になります。</p>
+</div>
+<div class="section" id="skill">
+<h2>6-3. エージェントにSkillを割り当てる<a class="headerlink" href="#skill" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>2つのスキルを作成して、エージェントに割り当てます。</p>
+<p>元の管理者のFlexインスタンスウィンドウから<a class="reference external" href="https://flex.twilio.com/admin">Flex管理ペイン</a>に移動し, <code class="docutils literal notranslate"><span class="pre">SKILLS</span></code>をクリックします。</p>
+<p><img alt="step4_4" src="../_images/step4_4.png" /></p>
+<p>左側の<code class="docutils literal notranslate"><span class="pre">ADD</span> <span class="pre">NEW</span> <span class="pre">SKILL</span></code>で<code class="docutils literal notranslate"><span class="pre">AWS</span></code>と<code class="docutils literal notranslate"><span class="pre">GCP</span></code>という名前のスキルを作成します。</p>
+<p><img alt="step4_5" src="../_images/step4_5.png" /></p>
+<p><a class="reference external" href="https://flex.twilio.com/teams/workers/">チーム画面</a>にいき、プルダウンメニューを<code class="docutils literal notranslate"><span class="pre">All</span> <span class="pre">Agents</span></code>に変更します</p>
+<p><img alt="step4_6" src="../_images/step4_6.png" /></p>
+<p>エージェント一人に<code class="docutils literal notranslate"><span class="pre">AWS</span></code>, もう一人に<code class="docutils literal notranslate"><span class="pre">GCP</span></code>のスキルを設定します。</p>
+<p><img alt="step4_7" src="../_images/step4_7.png" /></p>
+</div>
+<div class="section" id="taskroutertaskqueues">
+<h2>6-4. TaskRouterを使用してTaskQueuesの作成<a class="headerlink" href="#taskroutertaskqueues" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">AWS</span></code>、<code class="docutils literal notranslate"><span class="pre">GCP</span></code>のスキルがついている人に着信をルーティングする設定を行います。</p>
+<p>元の管理者のFlexインスタンスウィンドウから<a class="reference external" href="https://flex.twilio.com/admin">Flex管理ペイン</a>に移動し, <code class="docutils literal notranslate"><span class="pre">ROUTING</span></code>をクリックします。</p>
+<p><img alt="step4_8" src="../_images/step4_8.png" /></p>
+<p>workspacesの一覧画面に遷移するので、表示されている<code class="docutils literal notranslate"><span class="pre">Flex</span> <span class="pre">Task</span> <span class="pre">Assignment</span></code>をクリックします。</p>
+<p><img alt="step4_9" src="../_images/step4_9.png" /></p>
+<div class="section" id="taskqueue">
+<h3>TaskQueueの作成<a class="headerlink" href="#taskqueue" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">View</span> <span class="pre">all</span> <span class="pre">TaskQueues</span></code>をクリックします、</p>
+<p><img alt="step4_10" src="../_images/step4_10.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">+</span></code>をクリックして新しいTaskQueueを作成します。
+AWSとGCPの2つ作ってください。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TASKQUEUE</span> <span class="pre">NAME</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">AWS</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GCP</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QUEUE</span> <span class="pre">EXPRESSION</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">(routing.skills</span> <span class="pre">HAS</span> <span class="pre">'AWS')</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(routing.skills</span> <span class="pre">HAS</span> <span class="pre">'GCP')</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="step4_11" src="../_images/step4_11.png" /></p>
+</div>
+<div class="section" id="workflow">
+<h3>Workflowの作成<a class="headerlink" href="#workflow" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>左側のメニューにある<code class="docutils literal notranslate"><span class="pre">Workflows</span></code>をクリックします。
+<code class="docutils literal notranslate"><span class="pre">+</span></code>をクリックして新しいWorkflowを作成します。</p>
+<p><img alt="step4_12" src="../_images/step4_12.png" /></p>
+<p>AWSとGCPの2つ作ってください。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WORKFLOW</span> <span class="pre">NAME</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Assign</span> <span class="pre">to</span> <span class="pre">AWS</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Assign</span> <span class="pre">to</span> <span class="pre">GCP</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>同じ画面の<code class="docutils literal notranslate"><span class="pre">ADD</span> <span class="pre">a</span> <span class="pre">Filter</span></code>をクリックしてフィルターを作成します。</p>
+<p><img alt="step4_13" src="../_images/step4_13.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">MATCHING</span> <span class="pre">WORKERS</span></code>の見出しの下で、<code class="docutils literal notranslate"><span class="pre">QUEUE</span></code>フィールドをクリックして編集します。それを<code class="docutils literal notranslate"><span class="pre">AWS</span></code>/<code class="docutils literal notranslate"><span class="pre">GCP</span></code>に設定し、チェックボックスをクリックして保存します。</p>
+<p><img alt="step4_14" src="../_images/step4_14.png" /></p>
+<p>かなり基本的な手順ですが、Skill、Workflow、TaskQueueの組み合わせを使用して非常に複雑なワークフローを設定できます.</p>
+<p>この章は以上で終了になります。</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="step5.html" class="btn btn-neutral float-right" title="7. エージェントのスキルに基づいて着信をルーティングする" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="step3.html" class="btn btn-neutral float-left" title="5. Flexで着信を確認する" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, classmethod Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

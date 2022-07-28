@@ -1,0 +1,103 @@
+# 7. エージェントのスキルに基づいて着信をルーティングする
+
+Flexデプロイ時に組み込まれているIVRを編集し、発信者が`AWS`と`GCP`のどちらかを選択し、そのスキルを持つエージェントにコールをルーティングするようにしてみます。
+
+本ハンズオンではStudioという機能を使って作ります。
+
+>Twilio Studioはカスタマーコミュニケーションのデザイン、デプロイ、およびスケールを行うためのビジュアルインターフェイスです。 Twilio Engagement Cloudに新しく加わったTwilio Studioは、何百万という組織横断的なチームメンバーがカスタマーコミュニケーションをデザイン、デプロイ、スケーリングを行うパワーをもたらします。 これにより企業は、全組織におけるクリエイティブな才能を活用して顧客エンゲージメントのロードマップをすばやくトラッキングできるようになります。
+
+参考: [https://jp.twilio.com/docs/studio/user-guide](https://jp.twilio.com/docs/studio/user-guide)
+
+## 7-1. Voice IVRの編集
+
+[https://www.twilio.com/console/studio](https://www.twilio.com/console/studio)に遷移し、`Voice IVR`をクリックします。
+
+### AWSとGCP用
+![step5_1](../images/step5_1.png "step5_1")
+
+`Enqueue Call`ウィジェットをカンバスにドラックします。
+
+![step5_2](../images/step5_2.png "step5_2")
+
+- `WIDGET NAME`: `AWSCall`
+- `TASK ROUTER WORKSPACE`: `Flex Task Assignment`
+- `TASK ROUTER WORKFLOW`: `Assign to AWS`
+
+に設定し保存します。
+
+![step5_3](../images/step5_3.png "step5_3")
+
+GCP用も同じように作成します。
+
+- `WIDGET NAME`: `GCPCall`
+- `TASK ROUTER WORKSPACE`: `Flex Task Assignment`
+- `TASK ROUTER WORKFLOW`: `Assign to GCP`
+
+### 着信を一旦受け付ける用
+
+`Gather Input on Call`ををカンバスにドラックします。
+
+![step5_4](../images/step5_4.png "step5_4")
+
+着信時に自動応答するように以下の設定をします。
+
+- `WIDGET NAME`: 任意の名前
+- `SAY OR PLAY MESSAGE`: `Say a Message`
+- `TEXT TO SAY`: AWSは1, GCPは2を押してくださいといったメッセージを入力する
+- `LANGUAGE`: `TEXT TO SAY`に入力したメッセージの言語を選択
+
+![step5_5](../images/step5_5.png "step5_5")
+
+### ボタンプッシュを分割する用
+
+`Split Based On...`ををカンバスにドラックします。
+
+![step5_6](../images/step5_6.png "step5_6")
+
+以下の設定をして保存します。
+- `WIDGET NAME`: `split_keys`
+- `VARIABLE TO TEST`: `widgets.gather_1.Digits`
+
+![step5_7](../images/step5_7.png "step5_7")
+
+着信を分岐させる設定を行います。
+
+`New`をクリックし,`Condition Matches`をクリックします。
+
+![step5_9](../images/step5_9.png "step5_9")
+
+条件として
+`Equal TO`, `1`, `AWSCall`
+を設定して保存します。
+
+![step5_10](../images/step5_10.png "step5_10")
+
+GCPの方も追加しましょう。
+
+`NO CONDITION MATCHES`には既存の`SendCallToAgent`にします。
+
+カンバス上は以下のようになるはずです
+
+![step5_11](../images/step5_11.png "step5_11")
+
+### 残りのウィジェットをつなげる
+
+Triggerの`Incoming Call`を`gather_1`に、
+
+`gather_1`の`User Pressed Keys`を`split_keys`につなげます
+
+全体図は以下のようになるはずです。
+
+![step5_12](../images/step5_12.png "step5_12")
+
+最後に`Publish`をクリックして反映させます
+
+## 7-2. 実際に電話してみよう
+
+自動応答とプッシュ番号によるルーティングを作成しました。
+
+実際にFlexに設定されている番号に電話をかけて試してみましょう
+
+
+
+この章は以上で終了になります。
